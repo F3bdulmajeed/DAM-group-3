@@ -1,0 +1,42 @@
+Data<- read.csv(file.choose(),header = T)
+DDate<- as.Date(Data$Date)
+library(EloRating)
+library(devtools)
+## overAll Elo
+ELO <- elo.seq(winner = Data$Winner, loser = Data$Loser, Date = Data$Date, runcheck = F, startvalue = 1500)
+eloplot(ELO, ids = c("Federer R.","Nadal R.","Dimitrov G.","Djokovic N.","Del Potro J.M."))
+summary(ELO)
+Rank1<- 1:957
+PlayersELO<-extract_elo(ELO)
+top20<- subset(PlayersELO, Rank1<21)
+top20<- as.data.frame(top20)
+write.csv(top20,'top20AA')
+top20
+
+## Assumptions
+A<-as.matrix(ELO$mat)
+is.matrix(A)
+hist(A, break=100)
+
+
+####
+library(dplyr)
+Hard <- Data %>% filter(Surface=="Hard")
+ELOH<- elo.seq(winner = Hard$Winner, loser = Hard$Loser, Date = Hard$Date, runcheck = F, startvalue = 1500)
+eloplot(ELOH, ids = c("Federer R.","Nadal R.","Dimitrov G.","Djokovic N.","Murray A."))
+
+##GRASS
+
+Grass <- Data %>% filter(Surface=="Grass")
+ELOG<- elo.seq(winner = Grass$Winner, loser = Grass$Loser, Date = Grass$Date, runcheck = F, startvalue = 1500)
+
+## Clay
+Clay <- Data %>% filter(Surface=="Clay")
+ELOCL<- elo.seq(winner = Clay$Winner, loser = Clay$Loser, Date = Clay$Date, runcheck = F, startvalue = 1500)
+
+## Carpet
+Carpet <- Data %>% filter(Surface=="Carpet")
+ELOCA<- elo.seq(winner = Carpet$Winner, loser = Carpet$Loser, Date = Carpet$Date, runcheck = F, startvalue = 1500)
+
+###
+
